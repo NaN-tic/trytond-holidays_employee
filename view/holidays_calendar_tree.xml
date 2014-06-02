@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree string="Holidays Calendars">
+    <field name="name"/>
+    <field name="employee"/>
+    <field name="total_days"/>
+    <field name="remaining_days"/>
+</tree>

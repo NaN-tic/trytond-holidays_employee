@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Holidays Calendar">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="owner"/>
+    <field name="owner"/>
+    <group id="employee" col="6" colspan="4">
+        <label name="employee"/>
+        <field name="employee"/>
+        <label name="total_days"/>
+        <field name="total_days"/>
+        <label name="remaining_days"/>
+        <field name="remaining_days"/>
+    </group>
+    <notebook colspan="4">
+        <page string="General" id="general">
+            <separator name="description" colspan="4"/>
+            <field name="description" colspan="4"/>
+            <separator name="events" colspan="4"/>
+            <field name="events" colspan="4"/>
+        </page>
+        <page string="Access Permissions" id="permissions">
+            <field name="read_users" colspan="4"/>
+            <field name="write_users" colspan="4"/>
+        </page>
+    </notebook>
+    <group col="4" colspan="6" id="state_buttons">
+        <group col="2" colspan="2" id="state">
+            <label name="state"/>
+            <field name="state"/>
+        </group>
+        <group col="20" colspan="2" id="buttons">
+            <button name="open" string="Open" icon="tryton-go-previous"/>
+            <button name="done" string="Done" icon="tryton-go-next"/>
+        </group>
+    </group>
+</form>

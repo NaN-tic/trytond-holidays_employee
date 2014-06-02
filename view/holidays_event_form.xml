@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Holidays Event">
+    <label name="calendar"/>
+    <field name="calendar"/>
+    <notebook colspan="4">
+        <page string="General" id="general">
+            <label name="status"/>
+            <field name="status"/>
+            <label name="classification"/>
+            <field name="classification"/>
+            <group id="holiday" col="8" colspan="4">
+                <group id="'holiday_start" col="4" colspan="3">
+                    <label name="dtstart_type"/>
+                    <field name="dtstart_type"/>
+                    <label name="dtstart"/>
+                    <field name="dtstart" widget="date"/>
+                </group>
+                <group id="'holiday_end" col="4" colspan="3"
+                    states="{'invisible': (Eval('dtstart_type') == 'morning')}">
+                    <label name="dtend_type"/>
+                    <field name="dtend_type"/>
+                    <label name="dtend"/>
+                    <field name="dtend" widget="date"/>
+                </group>
+                <label name="days"/>
+                <field name="days"/>
+            </group>
+            <separator name="description" colspan="4"/>
+            <field name="description" colspan="4"/>
+        </page>
+        <page string="Occurences" id="occurences"
+            states="{'invisible': Bool(Eval('_parent_parent'))}">
+            <field name="rrules" colspan="2"/>
+            <field name="rdates" colspan="2"/>
+            <field name="exrules" colspan="2"/>
+            <field name="exdates" colspan="2"/>
+            <field name="occurences" colspan="4"
+                view_ids="calendar.event_view_tree_occurence"/>
+        </page>
+    </notebook>
+    <field name="parent" colspan="4" invisible="1"/>
+</form>
