@@ -37,6 +37,10 @@ class HolidaysCalendar(Calendar):
                     'invisible': Eval('state') == 'done',
                     },
                 })
+        cls._sql_constraints = [
+            ('name_employee_uniq', 'UNIQUE(name, employee)',
+                'The realtion of the name and the employee of holidays must be unique.'),
+            ]
 
     @staticmethod
     def default_holiday():
