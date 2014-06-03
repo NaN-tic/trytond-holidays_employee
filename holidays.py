@@ -39,7 +39,8 @@ class HolidaysCalendar(Calendar):
                 })
         cls._sql_constraints = [
             ('name_employee_uniq', 'UNIQUE(name, employee)',
-                'The realtion of the name and the employee of holidays must be unique.'),
+                'The realtion of the name and the employee of holidays must be'
+                ' unique.'),
             ]
 
     @staticmethod
@@ -90,20 +91,16 @@ class HolidaysEvent(Event):
     calendar = fields.Many2One('holidays_employee.calendar', 'Calendar',
             required=True, select=True, ondelete="CASCADE")
     dtstart_type = fields.Selection([
-        ('all_day', 'All Day'),
-        ('morning', 'Morning'),
-        ('afternoon', 'Afternoon'),
-        ], 'Start Date Type', on_change=['dtstart', 'dtend', 'dtstart_type',
-            'dtend_type'], required=True)
+            ('all_day', 'All Day'),
+            ('morning', 'Morning'),
+            ('afternoon', 'Afternoon'),
+            ], 'Start Date Type', required=True)
     dtend_type = fields.Selection([
-        ('all_day', 'All Day'),
-        ('morning', 'Morning'),
-        ('afternoon', 'Afternoon'),
-        ], 'End Date Type',  on_change=['dtstart', 'dtend', 'dtstart_type',
-            'dtend_type'])
-    days = fields.Function(fields.Float('Number of Days',
-            digits=(16, 2), on_change_with=[
-                'dtstart', 'dtend', 'dtstart_type', 'dtend_type']),
+            ('all_day', 'All Day'),
+            ('morning', 'Morning'),
+            ('afternoon', 'Afternoon'),
+            ], 'End Date Type')
+    days = fields.Function(fields.Float('Number of Days', digits=(16, 2)),
         'on_change_with_days')
     state = fields.Function(fields.Selection([
                 ('opened', 'Opened'),
@@ -113,19 +110,6 @@ class HolidaysEvent(Event):
     @classmethod
     def __setup__(cls):
         super(Event, cls).__setup__()
-        if cls.dtstart.on_change:
-            cls.dtstart.on_change |= ['dtstart', 'dtend', 'dtstart_type',
-                'dtend_type']
-        else:
-            cls.dtstart.on_change = ['dtstart', 'dtend', 'dtstart_type',
-                'dtend_type']
-        if cls.dtend.on_change:
-            cls.dtend.on_change |= ['dtstart', 'dtend', 'dtstart_type',
-                'dtend_type']
-        else:
-            cls.dtend.on_change = ['dtstart', 'dtend', 'dtstart_type',
-                'dtend_type']
-
         cls._error_messages.update({
                 'invalid_dates': ('The End Date (%s) is higher of the Start '
                     'Date (%s), and that it is not possible.'),
@@ -213,21 +197,26 @@ class HolidaysEvent(Event):
                     second=59, microsecond=999999)
         return result
 
+    @fields.depends('dtstart', 'dtend', 'dtstart_type', 'dtend_type')
     def on_change_dtstart(self):
         return self.onchange_dates('dtstart')
 
+    @fields.depends('dtstart', 'dtend', 'dtstart_type', 'dtend_type')
     def on_change_dtend(self):
         return self.onchange_dates('dtend')
 
+    @fields.depends('dtstart', 'dtend', 'dtstart_type', 'dtend_type')
     def on_change_dtstart_type(self):
         return self.onchange_dates('dtstart_type')
 
+    @fields.depends('dtstart', 'dtend', 'dtstart_type', 'dtend_type')
     def on_change_dtend_type(self):
         return self.onchange_dates('dtend_type')
 
+    @fields.depends('dtstart', 'dtend')
     def on_change_with_days(self, name=None):
         number = 0
         if self.dtstart and self.dtend:
-            days = (self.dtend - self.dtstart).total_seconds()/60/60/24
+            days = (self.dtend - self.dtstart).total_seconds() / 60 / 60 / 24
             number = float("%.2f" % days)
         return number
