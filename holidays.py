@@ -114,14 +114,14 @@ class HolidaysEvent(Event):
     def __setup__(cls):
         super(Event, cls).__setup__()
         if cls.dtstart.on_change:
-            cls.dtstart.on_change |= ['dtstart', 'dtend', 'dtstart_type',
-                'dtend_type']
+            cls.dtstart.on_change.extend(['dtstart', 'dtend', 'dtstart_type',
+                'dtend_type'])
         else:
             cls.dtstart.on_change = ['dtstart', 'dtend', 'dtstart_type',
                 'dtend_type']
         if cls.dtend.on_change:
-            cls.dtend.on_change |= ['dtstart', 'dtend', 'dtstart_type',
-                'dtend_type']
+            cls.dtend.on_change.extend(['dtstart', 'dtend', 'dtstart_type',
+                'dtend_type'])
         else:
             cls.dtend.on_change = ['dtstart', 'dtend', 'dtstart_type',
                 'dtend_type']
