@@ -193,10 +193,9 @@ class HolidaysEvent(Event):
         for events, vals in zip(actions, actions):
             for event in events:
                 if vals.get('dtstart_type', event.dtstart_type) == 'morning':
-                    vals['dtstart'] = datetime.combine(event.dtstart,
-                        time(0, 0))
-                    vals['dtend'] = datetime.combine(event.dtstart,
-                        time(11, 59))
+                    dtstart = vals.get('dtstart', event.dtstart)
+                    vals['dtstart'] = datetime.combine(dtstart, time(0, 0))
+                    vals['dtend'] = datetime.combine(dtstart, time(11, 59))
                     vals['dtend_type'] = 'morning'
                     to_write.extend(([event], vals))
                     continue
