@@ -1,0 +1,421 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:holidays_employee.calendar:"
+msgid "Calendar name \"%s\" can not end with .ics"
+msgstr "El nombre del calendario \"%s\" no debe terminar con la extensión .ics"
+
+msgctxt "error:holidays_employee.calendar:"
+msgid "The realtion of the name and the employee of holidays must be unique."
+msgstr "El nombre debe ser único para cada empleado"
+
+msgctxt "error:holidays_employee.event:"
+msgid ""
+"The End Date (%s) is higher of the Start Date (%s), and that it is not "
+"possible."
+msgstr ""
+"La fecha de finalización (%s) es superior a la fecha de inicio (%s) y esto "
+"no es posible."
+
+msgctxt "error:holidays_employee.event:"
+msgid "You have selected to much days. You have only %s days free."
+msgstr "Habéis seleccionado demasiados días. Solo tenéis %s días disponibles."
+
+msgctxt "field:holidays_employee.calendar,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:holidays_employee.calendar,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:holidays_employee.calendar,description:"
+msgid "Description"
+msgstr "Descripción"
+
+msgctxt "field:holidays_employee.calendar,employee:"
+msgid "Employee"
+msgstr "Empleado"
+
+msgctxt "field:holidays_employee.calendar,events:"
+msgid "Holiday Event"
+msgstr "Evento vacaciones"
+
+msgctxt "field:holidays_employee.calendar,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:holidays_employee.calendar,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:holidays_employee.calendar,owner:"
+msgid "Owner"
+msgstr "Titular"
+
+msgctxt "field:holidays_employee.calendar,read_users:"
+msgid "Read Users"
+msgstr "Usuarios lectura"
+
+msgctxt "field:holidays_employee.calendar,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:holidays_employee.calendar,remaining_days:"
+msgid "Remaining Days"
+msgstr "Dias restante"
+
+msgctxt "field:holidays_employee.calendar,state:"
+msgid "State"
+msgstr "Estado"
+
+msgctxt "field:holidays_employee.calendar,total_days:"
+msgid "Total Holidays"
+msgstr "Total vacaciones"
+
+msgctxt "field:holidays_employee.calendar,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:holidays_employee.calendar,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:holidays_employee.calendar,write_users:"
+msgid "Write Users"
+msgstr "Usuarios modificación"
+
+msgctxt "field:holidays_employee.event,alarms:"
+msgid "Alarms"
+msgstr "Alarmas"
+
+msgctxt "field:holidays_employee.event,all_day:"
+msgid "All Day"
+msgstr "Todo el día"
+
+msgctxt "field:holidays_employee.event,attendees:"
+msgid "Attendees"
+msgstr "Asistentes"
+
+msgctxt "field:holidays_employee.event,calendar:"
+msgid "Calendar"
+msgstr "Calendarios"
+
+msgctxt "field:holidays_employee.event,calendar_owner:"
+msgid "Owner"
+msgstr "Titular"
+
+msgctxt "field:holidays_employee.event,calendar_read_users:"
+msgid "Read Users"
+msgstr "Usuarios lectura"
+
+msgctxt "field:holidays_employee.event,calendar_write_users:"
+msgid "Write Users"
+msgstr "Usuarios modificación"
+
+msgctxt "field:holidays_employee.event,categories:"
+msgid "Categories"
+msgstr "Categorías"
+
+msgctxt "field:holidays_employee.event,classification:"
+msgid "Classification"
+msgstr "Clasificación"
+
+msgctxt "field:holidays_employee.event,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:holidays_employee.event,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:holidays_employee.event,days:"
+msgid "Number of Days"
+msgstr "Número de días"
+
+msgctxt "field:holidays_employee.event,description:"
+msgid "Description"
+msgstr "Descripción"
+
+msgctxt "field:holidays_employee.event,dtend:"
+msgid "End Date"
+msgstr "Fecha finalización"
+
+msgctxt "field:holidays_employee.event,dtend_type:"
+msgid "End Date Type"
+msgstr "Tipo de finalización"
+
+msgctxt "field:holidays_employee.event,dtstart:"
+msgid "Start Date"
+msgstr "Fecha inicial"
+
+msgctxt "field:holidays_employee.event,dtstart_type:"
+msgid "Start Date Type"
+msgstr "Tipo inicio"
+
+msgctxt "field:holidays_employee.event,exdates:"
+msgid "Exception Dates"
+msgstr "Fechas excluidas"
+
+msgctxt "field:holidays_employee.event,exrules:"
+msgid "Exception Rules"
+msgstr "Reglas de excepción"
+
+msgctxt "field:holidays_employee.event,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:holidays_employee.event,location:"
+msgid "Location"
+msgstr "Ubicación"
+
+msgctxt "field:holidays_employee.event,occurences:"
+msgid "Occurences"
+msgstr "Ocurrencias"
+
+msgctxt "field:holidays_employee.event,organizer:"
+msgid "Organizer"
+msgstr "Organizador"
+
+msgctxt "field:holidays_employee.event,parent:"
+msgid "Parent"
+msgstr "Padre"
+
+msgctxt "field:holidays_employee.event,rdates:"
+msgid "Recurrence Dates"
+msgstr "Fechas de recurrencia"
+
+msgctxt "field:holidays_employee.event,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:holidays_employee.event,recurrence:"
+msgid "Recurrence"
+msgstr "Recurrencia"
+
+msgctxt "field:holidays_employee.event,rrules:"
+msgid "Recurrence Rules"
+msgstr "Reglas de recurrencia"
+
+msgctxt "field:holidays_employee.event,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:holidays_employee.event,state:"
+msgid "State"
+msgstr "Estado"
+
+msgctxt "field:holidays_employee.event,status:"
+msgid "Status"
+msgstr "Estado"
+
+msgctxt "field:holidays_employee.event,summary:"
+msgid "Summary"
+msgstr "Resumen"
+
+msgctxt "field:holidays_employee.event,timezone:"
+msgid "Timezone"
+msgstr "Zona horaria"
+
+msgctxt "field:holidays_employee.event,transp:"
+msgid "Time Transparency"
+msgstr "Tiempo de transparencia"
+
+msgctxt "field:holidays_employee.event,uuid:"
+msgid "UUID"
+msgstr "UUID"
+
+msgctxt "field:holidays_employee.event,vevent:"
+msgid "vevent"
+msgstr "vevent"
+
+msgctxt "field:holidays_employee.event,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:holidays_employee.event,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "help:holidays_employee.calendar,owner:"
+msgid "The user must have an email"
+msgstr "El usuario debe tener un correo electrónico."
+
+msgctxt "help:holidays_employee.event,uuid:"
+msgid "Universally Unique Identifier"
+msgstr "Identificador universal único."
+
+msgctxt "model:holidays_employee.calendar,name:"
+msgid "Holidays Calendar"
+msgstr "Calendario vacaciones"
+
+msgctxt "model:holidays_employee.event,name:"
+msgid "Holidays Event"
+msgstr "Evento vacaciones"
+
+msgctxt "model:ir.action,name:act_holidays_calendar_form"
+msgid "Holidays"
+msgstr "Vacaciones"
+
+msgctxt "model:ir.action,name:act_holidays_event_calendar"
+msgid "Calendar"
+msgstr "Calendarios"
+
+msgctxt "model:ir.action,name:act_holidays_event_form"
+msgid "Events"
+msgstr "Eventos"
+
+msgctxt "model:ir.action,name:act_holidays_event_form3"
+msgid "Events"
+msgstr "Eventos"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_holidays_calendar_form_domain_all"
+msgid "All"
+msgstr "Todos"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_holidays_calendar_form_domain_done"
+msgid "Done"
+msgstr "Realizado"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_holidays_calendar_form_domain_opened"
+msgid "Opened"
+msgstr "Abierto"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_holidays_event_form_domain_all"
+msgid "All"
+msgstr "Todos"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_holidays_event_form_domain_done"
+msgid "Done"
+msgstr "Realizado"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_holidays_event_form_domain_opened"
+msgid "Opened"
+msgstr "Abierto"
+
+msgctxt "model:ir.ui.menu,name:menu_holday_event_form"
+msgid "Events"
+msgstr "Eventos"
+
+msgctxt "model:ir.ui.menu,name:menu_holidays_calendar_form"
+msgid "Holidays"
+msgstr "Vacaciones"
+
+msgctxt "model:ir.ui.menu,name:menu_holidays_event_calendar"
+msgid "Calendar"
+msgstr "Calendarios"
+
+msgctxt "selection:holidays_employee.calendar,state:"
+msgid "Done"
+msgstr "Realizado"
+
+msgctxt "selection:holidays_employee.calendar,state:"
+msgid "Opened"
+msgstr "Abierto"
+
+msgctxt "selection:holidays_employee.event,classification:"
+msgid "Confidential"
+msgstr "Confidencial"
+
+msgctxt "selection:holidays_employee.event,classification:"
+msgid "Private"
+msgstr "Privado"
+
+msgctxt "selection:holidays_employee.event,classification:"
+msgid "Public"
+msgstr "Público"
+
+msgctxt "selection:holidays_employee.event,dtend_type:"
+msgid "Afternoon"
+msgstr "Tarde"
+
+msgctxt "selection:holidays_employee.event,dtend_type:"
+msgid "All Day"
+msgstr "Todo el día"
+
+msgctxt "selection:holidays_employee.event,dtend_type:"
+msgid "Morning"
+msgstr "Mañana"
+
+msgctxt "selection:holidays_employee.event,dtstart_type:"
+msgid "Afternoon"
+msgstr "Tarde"
+
+msgctxt "selection:holidays_employee.event,dtstart_type:"
+msgid "All Day"
+msgstr "Todo el día"
+
+msgctxt "selection:holidays_employee.event,dtstart_type:"
+msgid "Morning"
+msgstr "Mañana"
+
+msgctxt "selection:holidays_employee.event,state:"
+msgid "Done"
+msgstr "Realizado"
+
+msgctxt "selection:holidays_employee.event,state:"
+msgid "Opened"
+msgstr "Abierto"
+
+msgctxt "selection:holidays_employee.event,status:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:holidays_employee.event,status:"
+msgid "Cancelled"
+msgstr "Cancelado"
+
+msgctxt "selection:holidays_employee.event,status:"
+msgid "Confirmed"
+msgstr "Confirmado"
+
+msgctxt "selection:holidays_employee.event,status:"
+msgid "Tentative"
+msgstr "Tentativo"
+
+msgctxt "selection:holidays_employee.event,transp:"
+msgid "Opaque"
+msgstr "Opaco"
+
+msgctxt "selection:holidays_employee.event,transp:"
+msgid "Transparent"
+msgstr "Transparente"
+
+msgctxt "view:holidays_employee.calendar:"
+msgid "Access Permissions"
+msgstr "Permisos de acceso"
+
+msgctxt "view:holidays_employee.calendar:"
+msgid "Done"
+msgstr "Realizado"
+
+msgctxt "view:holidays_employee.calendar:"
+msgid "General"
+msgstr "General"
+
+msgctxt "view:holidays_employee.calendar:"
+msgid "Holidays Calendar"
+msgstr "Calendario vacaciones"
+
+msgctxt "view:holidays_employee.calendar:"
+msgid "Holidays Calendars"
+msgstr "Calendarios vacaciones"
+
+msgctxt "view:holidays_employee.calendar:"
+msgid "Open"
+msgstr "Abierto"
+
+msgctxt "view:holidays_employee.event:"
+msgid "Holidays Event"
+msgstr "Evento vacaciones"
+
+msgctxt "view:holidays_employee.event:"
+msgid "Holidays Events"
+msgstr "Eventos vacaciones"

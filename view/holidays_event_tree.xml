@@ -3,8 +3,8 @@
 this repository contains the full copyright notices and license terms. -->
 <tree string="Holidays Events">
     <field name="calendar"/>
-    <field name="dtstart"/>
-    <field name="dtend"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
     <field name="days"/>
     <field name="status"/>
 </tree>

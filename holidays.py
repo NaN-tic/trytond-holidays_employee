@@ -4,6 +4,7 @@ from trytond.model import fields
 from trytond.pyson import Eval
 from trytond.model import ModelView
 from trytond.modules.calendar.calendar_ import Calendar, Event
+from datetime import timedelta, datetime, time
 
 
 __all__ = ['HolidaysCalendar', 'HolidaysEvent']
@@ -78,10 +79,6 @@ class HolidaysCalendar(Calendar):
             holiday.state = 'done'
             holiday.save()
 
-    #@classmethod
-    #def delete(cls, events):
-    #    return super(Event, cls).delete(events)
-
 
 class HolidaysEvent(Event):
     'Holidays Event'
@@ -100,6 +97,11 @@ class HolidaysEvent(Event):
             ('morning', 'Morning'),
             ('afternoon', 'Afternoon'),
             ], 'End Date Type')
+    start_date = fields.Function(fields.Date('Start Date'),
+        'get_start_date', setter='set_dates',
+        searcher='search_date')
+    end_date = fields.Function(fields.Date('End Date'),
+        'get_end_date', setter='set_dates', searcher='search_date')
     days = fields.Function(fields.Float('Number of Days', digits=(16, 2)),
         'on_change_with_days')
     state = fields.Function(fields.Selection([
@@ -116,6 +118,14 @@ class HolidaysEvent(Event):
                 'invalid_days': ('You have selected to much days. You have '
                     'only %s days free.'),
                 })
+
+    @staticmethod
+    def default_dtstart():
+        return datetime.now()
+
+    @staticmethod
+    def default_dtend():
+        return datetime.now()
 
     @staticmethod
     def default_dtstart_type():
@@ -165,58 +175,69 @@ class HolidaysEvent(Event):
             self.raise_user_error('invalid_days',
                 (self.calendar.remaining_days))
 
-    def onchange_dates(self, change):
-        result = {}
-        if change in ('dtstart', 'dtstart_type') and self.dtstart:
-            if self.dtstart_type == 'morning':
-                result['dtstart'] = self.dtstart.replace(hour=0, minute=0,
-                    second=0, microsecond=0)
-                result['dtend_type'] = self.dtstart_type
-                result['dtend'] = self.dtstart.replace(hour=11, minute=59,
-                    second=59, microsecond=999999)
-            else:
-                result['dtend_type'] = self.dtstart_type
-                result['dtend'] = self.dtstart.replace(hour=23, minute=59,
-                    second=59, microsecond=999999)
-                if self.dtstart_type == 'afternoon':
-                    result['dtstart'] = self.dtstart.replace(hour=12, minute=0,
-                        second=0, microsecond=0)
-                else:
-                    result['dtstart'] = self.dtstart.replace(hour=0, minute=0,
-                        second=0, microsecond=0)
-        elif change in ('dtend', 'dtend_type') and self.dtend:
-            if self.dtend_type == 'morning':
-                result['dtend'] = self.dtend.replace(hour=11, minute=59,
-                    second=59, microsecond=999999)
-            elif self.dtend_type == 'afternoon':
-                result['dtend_type'] = self.dtstart_type
-                result['dtend'] = self.dtstart.replace(hour=23, minute=59,
-                    second=59, microsecond=999999)
-            else:
-                result['dtend'] = self.dtend.replace(hour=23, minute=59,
-                    second=59, microsecond=999999)
-        return result
+    def get_start_date(self, name=None):
+        return self.dtstart.date()
 
-    @fields.depends('dtstart', 'dtend', 'dtstart_type', 'dtend_type')
-    def on_change_dtstart(self):
-        return self.onchange_dates('dtstart')
+    def get_end_date(self, name=None):
+        return self.dtend.date()
 
-    @fields.depends('dtstart', 'dtend', 'dtstart_type', 'dtend_type')
-    def on_change_dtend(self):
-        return self.onchange_dates('dtend')
+    @classmethod
+    def set_dates(cls, events, name, value):
+        fname = 'dtend' if name == 'end_date' else 'dtstart'
+        cls.write(events, {fname: datetime.combine(value, time(0, 00))})
 
-    @fields.depends('dtstart', 'dtend', 'dtstart_type', 'dtend_type')
-    def on_change_dtstart_type(self):
-        return self.onchange_dates('dtstart_type')
+    @classmethod
+    def write(cls, *args):
+        actions = iter(args)
+        to_write = []
+        for events, vals in zip(actions, actions):
+            for event in events:
+                if vals.get('dtstart_type', event.dtstart_type) == 'morning':
+                    vals['dtstart'] = datetime.combine(event.dtstart,
+                        time(0, 0))
+                    vals['dtend'] = datetime.combine(event.dtstart,
+                        time(11, 59))
+                    vals['dtend_type'] = 'morning'
+                    to_write.extend(([event], vals))
+                    continue
+                for fname in ('dtstart', 'dtend'):
+                    value = vals.get(fname, getattr(event, fname))
+                    ctime = time(23, 59)
+                    if fname == 'dtstart':
+                        if (vals.get('dstart_type', event.dtstart_type) ==
+                                'afternoon'):
+                            ctime == time(12, 00)
+                        else:
+                            ctime = time(0, 0)
+                    elif vals.get('dtend_type', event.dtend_type) == 'morning':
+                            ctime == time(11, 59)
+                    vals[fname] = datetime.combine(value, ctime)
+                to_write.extend(([event], vals))
+        super(HolidaysEvent, cls).write(*to_write)
 
-    @fields.depends('dtstart', 'dtend', 'dtstart_type', 'dtend_type')
-    def on_change_dtend_type(self):
-        return self.onchange_dates('dtend_type')
+    @classmethod
+    def search_dates(cls, name, clause):
+        new_name = 'dtend' if name == 'end_date' else 'dtstart'
+        _, operator, value = clause[:2]
+        value = datetime.combine(value, time(23, 59))
+        return [(new_name, operator, value)]
 
-    @fields.depends('dtstart', 'dtend')
+    @fields.depends('dtstart_type')
+    def on_change_with_dtend_type(self):
+        return self.dtstart_type
+
+    @fields.depends('start_date', 'dtstart_type', 'end_date', 'dtend_type')
     def on_change_with_days(self, name=None):
+        if self.dtstart_type == 'morning':
+            return 0.5
         number = 0
-        if self.dtstart and self.dtend:
-            days = (self.dtend - self.dtstart).total_seconds() / 60 / 60 / 24
-            number = float("%.2f" % days)
+        if self.dtstart_type == 'afternoon':
+            number += 0.5
+        if self.dtend_type == 'morning':
+            number -= 0.5
+        if self.start_date and self.end_date:
+            start_date = self.start_date
+            if self.dtstart_type == 'all_day':
+                start_date = self.start_date - timedelta(days=1)
+            return (self.end_date - start_date).days + number
         return number
