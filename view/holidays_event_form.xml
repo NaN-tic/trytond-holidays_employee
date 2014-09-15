@@ -2,12 +2,14 @@
 <!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form string="Holidays Event">
-    <label name="calendar"/>
-    <field name="calendar" colspan="3"/>
-    <label name="status"/>
-    <field name="status"/>
-    <label name="classification"/>
-    <field name="classification"/>
+    <group id="main" col="6" colspan="4">
+        <label name="calendar"/>
+        <field name="calendar"/>
+        <label name="status"/>
+        <field name="status"/>
+        <label name="classification"/>
+        <field name="classification"/>
+    </group>
     <group id="holiday" col="8" colspan="4">
         <group id="'holiday_start" col="4" colspan="3">
             <label name="dtstart_type"/>
@@ -25,7 +27,11 @@ this repository contains the full copyright notices and license terms. -->
         <label name="days"/>
         <field name="days"/>
     </group>
+
     <separator name="description" colspan="4"/>
     <field name="description" colspan="4"/>
+
     <field name="parent" colspan="4" invisible="1"/>
+    <field name="dtstart" invisible="1"/>
+    <field name="dtend" invisible="1"/>
 </form>

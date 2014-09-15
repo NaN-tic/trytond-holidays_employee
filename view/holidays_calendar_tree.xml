@@ -6,4 +6,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="employee"/>
     <field name="total_days"/>
     <field name="remaining_days"/>
+    <field name="general_holidays"/>
 </tree>

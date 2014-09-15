@@ -1,10 +1,13 @@
 #This file is part of Tryton.  The COPYRIGHT file at the top level of
 #this repository contains the full copyright notices and license terms.
+from trytond.pool import Pool
 from trytond.model import fields
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.model import ModelView
 from trytond.modules.calendar.calendar_ import Calendar, Event
+from trytond.transaction import Transaction
 from datetime import timedelta, datetime, time
+import pytz
 
 
 __all__ = ['HolidaysCalendar', 'HolidaysEvent']
@@ -17,7 +20,11 @@ class HolidaysCalendar(Calendar):
 
     events = fields.One2Many('holidays_employee.event', 'calendar',
         'Holiday Event')
-    employee = fields.Many2One('company.employee', 'Employee', required=True)
+    general_holidays = fields.Boolean('General Holidays')
+    employee = fields.Many2One('company.employee', 'Employee', states={
+            'invisible': Bool(Eval('general_holidays')),
+            'required': ~Bool(Eval('general_holidays')),
+            }, depends=['general_holidays'])
     total_days = fields.Float('Total Holidays', digits=(16, 2))
     remaining_days = fields.Function(
         fields.Float('Remaining Days', digits=(16, 2)),
@@ -49,6 +56,10 @@ class HolidaysCalendar(Calendar):
         return False
 
     @staticmethod
+    def default_general_holidays():
+        return False
+
+    @staticmethod
     def default_total_days():
         return 23
 
@@ -63,7 +74,15 @@ class HolidaysCalendar(Calendar):
         return self.total_days - days
 
     def get_rec_name(self, name):
-        return self.name + ' - ' + self.employee.party.name
+        if not self.general_holidays:
+            return self.name + ' - ' + self.employee.party.name
+        User = Pool().get('res.user')
+        user = User(Transaction().user)
+        company_name = (user and user.company and user.company.party and
+            user.company.party.name or "")
+        if company_name:
+            return self.name + ' - ' + company_name
+        return self.name
 
     @classmethod
     @ModelView.button
@@ -97,9 +116,8 @@ class HolidaysEvent(Event):
             ('morning', 'Morning'),
             ('afternoon', 'Afternoon'),
             ], 'End Date Type')
-    start_date = fields.Function(fields.Date('Start Date'),
-        'get_start_date', setter='set_dates',
-        searcher='search_date')
+    start_date = fields.Function(fields.Date('Start Date',required=True),
+        'get_start_date', setter='set_dates', searcher='search_date')
     end_date = fields.Function(fields.Date('End Date'),
         'get_end_date', setter='set_dates', searcher='search_date')
     days = fields.Function(fields.Float('Number of Days', digits=(16, 2)),
@@ -118,14 +136,6 @@ class HolidaysEvent(Event):
                 'invalid_days': ('You have selected to much days. You have '
                     'only %s days free.'),
                 })
-
-    @staticmethod
-    def default_dtstart():
-        return datetime.now()
-
-    @staticmethod
-    def default_dtend():
-        return datetime.now()
 
     @staticmethod
     def default_dtstart_type():
@@ -183,60 +193,76 @@ class HolidaysEvent(Event):
 
     @classmethod
     def set_dates(cls, events, name, value):
-        fname = 'dtend' if name == 'end_date' else 'dtstart'
-        cls.write(events, {fname: datetime.combine(value, time(0, 00))})
-
-    @classmethod
-    def write(cls, *args):
-        actions = iter(args)
-        to_write = []
-        for events, vals in zip(actions, actions):
-            for event in events:
-                if vals.get('dtstart_type', event.dtstart_type) == 'morning':
-                    dtstart = vals.get('dtstart', event.dtstart)
-                    vals['dtstart'] = datetime.combine(dtstart, time(0, 0))
-                    vals['dtend'] = datetime.combine(dtstart, time(11, 59))
-                    vals['dtend_type'] = 'morning'
-                    to_write.extend(([event], vals))
-                    continue
-                for fname in ('dtstart', 'dtend'):
-                    value = vals.get(fname, getattr(event, fname))
-                    ctime = time(23, 59)
-                    if fname == 'dtstart':
-                        if (vals.get('dstart_type', event.dtstart_type) ==
-                                'afternoon'):
-                            ctime == time(12, 00)
-                        else:
-                            ctime = time(0, 0)
-                    elif vals.get('dtend_type', event.dtend_type) == 'morning':
-                            ctime == time(11, 59)
-                    vals[fname] = datetime.combine(value, ctime)
-                to_write.extend(([event], vals))
-        super(HolidaysEvent, cls).write(*to_write)
+        pass
 
     @classmethod
     def search_dates(cls, name, clause):
         new_name = 'dtend' if name == 'end_date' else 'dtstart'
         _, operator, value = clause[:2]
-        value = datetime.combine(value, time(23, 59))
+        value = datetime.combine(value, time(23, 59, tzinfo=pytz.utc))
         return [(new_name, operator, value)]
 
-    @fields.depends('dtstart_type')
-    def on_change_with_dtend_type(self):
-        return self.dtstart_type
+    def _on_change_date(self, change):
+        result = {}
+        if self.dtstart_type == 'morning' and self.start_date or (
+            self.dtstart_type in ('afternoon', 'all_day')
+            and self.start_date and self.end_date
+            and self.start_date == self.end_date):
+            result['dtend_type'] = self.dtstart_type
+            result['dtstart'] =datetime.combine(self.start_date, time(0, 0,
+                    tzinfo=pytz.utc))
+            result['dtend'] = datetime.combine(self.start_date, time(11, 59,
+                    tzinfo=pytz.utc))
 
-    @fields.depends('start_date', 'dtstart_type', 'end_date', 'dtend_type')
+            result['end_date'] = self.start_date
+        elif self.dtstart_type == 'morning':
+            result['dtend_type'] = self.dtstart_type
+        if change in ('start_date', 'dtstart_type') and self.dtstart:
+            if self.dtstart_type == 'all_day':
+                result['dtstart'] = datetime.combine(self.start_date, time(0,
+                        0, tzinfo=pytz.utc))
+            elif self.dtstart_type == 'afternoon':
+                result['dtstart'] = datetime.combine(self.start_date, time(12,
+                        0, tzinfo=pytz.utc))
+        elif change in ('end_date', 'dtend_type') and self.end_date:
+            if self.dtend_type == 'morning':
+                result['dtend'] = datetime.combine(self.end_date, time(11,59,
+                        tzinfo=pytz.utc))
+            else:
+                result['dtend'] = datetime.combine(self.end_date, time(23, 59,
+                        tzinfo=pytz.utc))
+        return result
+
+    @fields.depends('start_date', 'end_date', 'dtstart_type', 'dtend_type',
+        'dtstart', 'dtend')
+    def on_change_start_date(self, name=None):
+        return self._on_change_date('start_date')
+
+    @fields.depends('start_date', 'end_date', 'dtstart_type', 'dtend_type',
+        'dtstart', 'dtend')
+    def on_change_end_date(self):
+        return self._on_change_date('end_date')
+
+    @fields.depends('start_date', 'end_date', 'dtstart_type', 'dtend_type',
+        'dtstart', 'dtend')
+    def on_change_dtstart_type(self, name=None):
+        return self._on_change_date('dtstart_type')
+
+    @fields.depends('start_date', 'end_date', 'dtstart_type', 'dtend_type',
+        'dtstart', 'dtend')
+    def on_change_dtend_type(self, name=None):
+        return self._on_change_date('dtend_type')
+
+    @fields.depends('start_date', 'end_date', 'dtstart_type', 'dtend_type')
     def on_change_with_days(self, name=None):
         if self.dtstart_type == 'morning':
             return 0.5
         number = 0
-        if self.dtstart_type == 'afternoon':
-            number += 0.5
-        if self.dtend_type == 'morning':
-            number -= 0.5
         if self.start_date and self.end_date:
-            start_date = self.start_date
-            if self.dtstart_type == 'all_day':
-                start_date = self.start_date - timedelta(days=1)
+            start_date = self.start_date - timedelta(days=1)
+            if self.dtstart_type == 'afternoon':
+                number -= 0.5
+            if self.dtend_type == 'morning':
+                number -= 0.5
             return (self.end_date - start_date).days + number
         return number

@@ -6,7 +6,9 @@ this repository contains the full copyright notices and license terms. -->
     <field name="name"/>
     <label name="owner"/>
     <field name="owner"/>
-    <group id="employee" col="6" colspan="4">
+    <group id="employee" col="8" colspan="4">
+        <label name="general_holidays"/>
+        <field name="general_holidays"/>
         <label name="employee"/>
         <field name="employee"/>
         <label name="total_days"/>
