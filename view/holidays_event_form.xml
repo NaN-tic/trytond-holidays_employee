@@ -5,12 +5,18 @@ this repository contains the full copyright notices and license terms. -->
     <group id="main" col="6" colspan="4">
         <label name="calendar"/>
         <field name="calendar"/>
-        <label name="status"/>
-        <field name="status"/>
-        <label name="classification"/>
-        <field name="classification"/>
+        <group id="" col="6" colspan="4">
+            <label name="status"/>
+            <field name="status"/>
+            <label name="classification"/>
+            <field name="classification"/>
+            <label name="days"/>
+            <field name="days"/>
+        </group>
     </group>
     <group id="holiday" col="8" colspan="4">
+        <label name="elective"/>
+        <field name="elective"/>
         <group id="'holiday_start" col="4" colspan="3">
             <label name="dtstart_type"/>
             <field name="dtstart_type"/>
@@ -24,8 +30,6 @@ this repository contains the full copyright notices and license terms. -->
             <label name="end_date"/>
             <field name="end_date"/>
         </group>
-        <label name="days"/>
-        <field name="days"/>
     </group>
 
     <separator name="description" colspan="4"/>
