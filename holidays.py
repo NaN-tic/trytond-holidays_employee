@@ -84,7 +84,7 @@ class HolidaysCalendar(Calendar):
         for calendar in calendars:
             days = 0
             edays = 0
-            for event in self.events:
+            for event in calendar.events:
                 if not event.elective:
                     days += event.days
                 else:
