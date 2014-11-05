@@ -3,8 +3,10 @@
 this repository contains the full copyright notices and license terms. -->
 <tree string="Holidays Calendars">
     <field name="name"/>
+    <field name="general_holidays"/>
     <field name="employee"/>
     <field name="total_days"/>
     <field name="remaining_days"/>
-    <field name="general_holidays"/>
+    <field name="elective_days"/>
+    <field name="remaining_elective_days"/>
 </tree>

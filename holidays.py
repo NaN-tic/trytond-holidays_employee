@@ -29,6 +29,10 @@ class HolidaysCalendar(Calendar):
     remaining_days = fields.Function(
         fields.Float('Remaining Days', digits=(16, 2)),
         'get_remainig_days')
+    elective_days = fields.Float('Total Elective days', digits=(16, 2))
+    remaining_elective_days = fields.Function(
+        fields.Float('Remaining Elective Days', digits=(16, 2)),
+        'get_remainig_days')
     state = fields.Selection([
             ('opened', 'Opened'),
             ('done', 'Done'),
@@ -64,14 +68,30 @@ class HolidaysCalendar(Calendar):
         return 23
 
     @staticmethod
+    def default_elective_days():
+        return 2
+
+    @staticmethod
     def default_state():
         return 'opened'
 
-    def get_remainig_days(self, name):
+    def get_remainig_days(self, names):
+        result = {
+            'remaining_days': 0,
+            'remaining_elective_days': 0,
+            }
         days = 0
+        edays = 0
         for event in self.events:
-            days += event.days
-        return self.total_days - days
+            if not event.elective:
+                days += event.days
+            else:
+                edays += event.edays
+        result = {
+            'remaining_days': self.total_days - days,
+            'remaining_elective_days': self.elective_days - edays,
+            }
+        return result
 
     def get_rec_name(self, name):
         if not self.general_holidays:
@@ -122,6 +142,7 @@ class HolidaysEvent(Event):
         'get_end_date', setter='set_dates', searcher='search_date')
     days = fields.Function(fields.Float('Number of Days', digits=(16, 2)),
         'on_change_with_days')
+    elective = fields.Boolean('Elective Day')
     state = fields.Function(fields.Selection([
                 ('opened', 'Opened'),
                 ('done', 'Done'),
@@ -135,6 +156,8 @@ class HolidaysEvent(Event):
                     'Date (%s), and that it is not possible.'),
                 'invalid_days': ('You have selected to much days. You have '
                     'only %s days free.'),
+                'invalidelective__days': ('You have selected to much elective '
+                    'days. You have only %s days free.'),
                 })
 
     @staticmethod
@@ -157,6 +180,10 @@ class HolidaysEvent(Event):
     def default_days():
         return 0
 
+    @staticmethod
+    def default_elective():
+        return False
+
     def get_state(self, name=None):
         return self.calendar.state if self.calendar else 'opened'
 
@@ -172,6 +199,7 @@ class HolidaysEvent(Event):
         for event in events:
             event.check_dates()
             event.check_days()
+            event.check_elective_days()
         super(HolidaysEvent, cls).validate(events)
 
     def check_dates(self):
@@ -184,6 +212,11 @@ class HolidaysEvent(Event):
         if self.calendar.total_days < self.calendar.remaining_days + self.days:
             self.raise_user_error('invalid_days',
                 (self.calendar.remaining_days))
+
+    def check_elective_days(self):
+        if self.calendar.elective_days < self.calendar.remaining_elective_days + self.days:
+            self.raise_user_error('invalid_elective_days',
+                (self.calendar.remaining_elective_days))
 
     def get_start_date(self, name=None):
         return self.dtstart.date()

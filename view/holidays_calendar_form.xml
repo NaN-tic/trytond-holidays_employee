@@ -2,19 +2,25 @@
 <!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form string="Holidays Calendar">
-    <label name="name"/>
-    <field name="name"/>
-    <label name="owner"/>
-    <field name="owner"/>
-    <group id="employee" col="8" colspan="4">
+    <group id="general" col="6" colspan="4">
+        <label name="name"/>
+        <field name="name"/>
         <label name="general_holidays"/>
         <field name="general_holidays"/>
+        <label name="owner"/>
+        <field name="owner"/>
+    </group>
+    <group id="employee" col="10" colspan="4">
         <label name="employee"/>
         <field name="employee"/>
         <label name="total_days"/>
         <field name="total_days"/>
         <label name="remaining_days"/>
         <field name="remaining_days"/>
+        <label name="elective_days"/>
+        <field name="elective_days"/>
+        <label name="remaining_elective_days"/>
+        <field name="remaining_elective_days"/>
     </group>
     <notebook colspan="4">
         <page string="General" id="general">
