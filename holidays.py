@@ -75,23 +75,23 @@ class HolidaysCalendar(Calendar):
     def default_state():
         return 'opened'
 
-    def get_remainig_days(self, names):
-        result = {
-            'remaining_days': 0,
-            'remaining_elective_days': 0,
-            }
-        days = 0
-        edays = 0
-        for event in self.events:
-            if not event.elective:
-                days += event.days
-            else:
-                edays += event.edays
-        result = {
-            'remaining_days': self.total_days - days,
-            'remaining_elective_days': self.elective_days - edays,
-            }
-        return result
+    @classmethod
+    def get_remainig_days(cls, calendars, names):
+        res = {}
+        for fname in names:
+            res[fname] = {}
+
+        for calendar in calendars:
+            days = 0
+            edays = 0
+            for event in calendar.events:
+                if not event.elective:
+                    days += event.days
+                else:
+                    edays += event.edays
+            res['remaining_days'][calendar.id] = calendar.total_days - days
+            res['remaining_elective_days'][calendar.id] = calendar.elective_days - edays
+        return res
 
     def get_rec_name(self, name):
         if not self.general_holidays:
